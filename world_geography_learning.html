@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>世界地理交互式教学平台</title>
+<style>
+:root{--blue:#2454d8;--blue2:#3f75f6;--ink:#182438;--muted:#68778d;--bg:#f2f6fb;--card:#fff;--line:#e7edf5;--green:#1fbf75;--shadow:0 8px 26px rgba(30,55,90,.07);--radius:18px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);font-family:Inter,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);font-size:14px}
+button,input{font:inherit}button{cursor:pointer}.topbar{background:linear-gradient(115deg,#204bd0,#2864e8);color:white;padding:18px max(24px,calc((100vw - 1240px)/2));box-shadow:0 4px 18px #1746bd30}
+.brand{display:flex;align-items:center;gap:12px}.globe{font-size:31px;filter:drop-shadow(0 2px 3px #133ca0)}.brand h1{font-size:23px;letter-spacing:.3px;margin:0;font-weight:800}.brand p{font-size:12px;margin:5px 0 0;color:#dce7ff}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:16px}.top-actions{display:flex;align-items:center;gap:9px}.top-btn{border:1px solid #ffffff50;color:white;background:#ffffff17;border-radius:10px;padding:9px 12px}.top-btn:hover{background:#ffffff2b}
+.shell{max-width:1240px;margin:24px auto 40px;padding:0 20px;display:grid;grid-template-columns:285px minmax(0,1fr);gap:18px;align-items:start}.sidebar,.panel{background:var(--card);border:1px solid #e8eef5;border-radius:var(--radius);box-shadow:var(--shadow)}.sidebar{padding:20px;position:sticky;top:18px}.side-heading{display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:800;margin-bottom:14px}.small-label{font-size:11px;color:var(--muted);font-weight:600}.chapter-list{display:grid;gap:6px}.chapter{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:11px 12px;border:0;background:transparent;border-radius:11px;color:#536176;transition:.18s}.chapter:hover{background:#f2f6ff;color:var(--blue)}.chapter.active{background:#edf3ff;color:#2454d8;font-weight:750}.chapter .num{display:grid;place-items:center;width:27px;height:27px;border-radius:8px;background:#f0f3f8;color:#6e7b8f;font-size:12px;font-weight:800;flex-shrink:0}.chapter.active .num{background:var(--blue);color:white}.chapter .check{margin-left:auto;color:var(--green);font-weight:900}.side-divider{height:1px;background:var(--line);margin:18px 0}.searchbox{display:flex;align-items:center;gap:8px;background:#f8fafd;border:1px solid #e5ebf4;padding:10px 11px;border-radius:11px}.searchbox input{width:100%;border:0;outline:0;background:transparent;color:var(--ink);min-width:0}.search-hint{font-size:11px;color:#8a97a9;margin:10px 2px 0;line-height:1.6}.progress-wrap{margin-top:18px;background:#f8fafd;border:1px solid var(--line);padding:13px;border-radius:12px}.progress-top{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:9px}.progress-track{height:6px;border-radius:20px;background:#e5ebf4;overflow:hidden}.progress-bar{height:100%;width:0;background:linear-gradient(90deg,#2d62e7,#35c68a);border-radius:20px;transition:width .3s}
+.main{min-width:0;display:grid;gap:18px}.welcome{padding:22px 25px;background:linear-gradient(110deg,#fff 0%,#f4f8ff 100%);display:flex;align-items:center;justify-content:space-between;gap:20px;overflow:hidden;position:relative}.eyebrow{font-size:11px;letter-spacing:1.2px;color:var(--blue);font-weight:800;text-transform:uppercase}.welcome h2{font-size:25px;margin:8px 0 7px;letter-spacing:-.5px}.welcome p{color:var(--muted);line-height:1.7;margin:0;max-width:550px}.welcome-graphic{font-size:75px;opacity:.9;filter:drop-shadow(0 8px 12px #2454d82a);padding:0 20px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{padding:15px 17px;background:white;border:1px solid var(--line);border-radius:14px}.stat-label{color:var(--muted);font-size:12px}.stat-value{font-size:23px;font-weight:850;margin:6px 0 2px}.stat-note{font-size:11px;color:#8290a4}
+.lesson{padding:23px 25px}.lesson-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:17px}.lesson-head h2{margin:0;font-size:21px}.lesson-head p{margin:7px 0 0;color:var(--muted);line-height:1.65}.pill{display:inline-flex;align-items:center;gap:6px;border-radius:20px;background:#edf3ff;color:#2858d6;padding:7px 10px;font-size:11px;font-weight:750;white-space:nowrap}.lesson-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.95fr);gap:20px}.facts{display:grid;gap:10px;align-content:start}.fact{display:flex;gap:11px;padding:12px;border-radius:12px;background:#f8fafd;border:1px solid #edf1f7;line-height:1.65}.fact-icon{width:31px;height:31px;display:grid;place-items:center;flex-shrink:0;border-radius:9px;background:#e8efff;font-size:16px}.fact strong{display:block;margin-bottom:2px;font-size:13px}.fact span{font-size:12px;color:#65748a}
+.map-card{padding:14px;background:#f0f8ff;border:1px solid #e0efff;border-radius:14px;min-width:0}.map-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.map-card-head strong{font-size:13px}.map-card-head span{font-size:11px;color:#7185a1}.map-hint{font-size:12px;color:#5c6f88;margin:0 0 10px}.map-stage{border-radius:10px;overflow:hidden;background:#9bc9ff;position:relative}.map-stage svg{width:100%;height:auto;display:block}.continent{cursor:pointer;stroke:#fff;stroke-width:1.5;stroke-linejoin:round;transition:fill .18s,transform .18s;transform-box:fill-box;transform-origin:center}.continent:hover{fill:#16a765;transform:scale(1.025)}.continent.selected{fill:#ffbd4a;stroke:#fff4d8;stroke-width:3}.map-caption{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:#7185a1;margin-top:9px}.selected-info{padding:12px;margin-top:10px;background:#fff;border:1px solid #e5effa;border-radius:10px}.selected-info strong{display:block;font-size:13px;margin-bottom:4px}.selected-info p{margin:0;color:#65748a;font-size:12px;line-height:1.6}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}.section-title h3{margin:0;font-size:16px}.section-title p{margin:0;color:var(--muted);font-size:12px}.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.quick-card{padding:15px;border:1px solid var(--line);border-radius:13px;background:#fff;transition:.2s}.quick-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px #1b376b10}.quick-icon{width:36px;height:36px;border-radius:11px;background:#edf3ff;display:grid;place-items:center;font-size:19px;margin-bottom:12px}.quick-card h4{font-size:13px;margin:0 0 6px}.quick-card p{font-size:12px;color:var(--muted);line-height:1.6;margin:0 0 11px}.text-btn{border:0;background:transparent;color:var(--blue);font-size:12px;font-weight:750;padding:0}
+.quiz{padding:22px 25px}.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.quiz-top h3{margin:0;font-size:16px}.quiz-count{font-size:11px;color:var(--muted)}.question{font-size:16px;font-weight:750;line-height:1.6;margin:18px 0 14px}.options{display:grid;grid-template-columns:1fr 1fr;gap:9px}.option{border:1px solid #e4eaf2;background:#fff;border-radius:11px;padding:12px;text-align:left;color:#435168;display:flex;gap:10px;align-items:center;transition:.15s}.option:hover{border-color:#9db8ff;background:#f7f9ff}.option .letter{display:grid;place-items:center;width:25px;height:25px;flex-shrink:0;border-radius:7px;background:#f0f3f8;font-size:11px;font-weight:800}.option.correct{border-color:#43c58b;background:#edfbf4;color:#14784a}.option.wrong{border-color:#ff9d9d;background:#fff2f2;color:#a33}.option:disabled{cursor:default}.feedback{display:none;margin-top:13px;padding:12px;border-radius:10px;font-size:12px;line-height:1.6}.feedback.show{display:block}.feedback.good{background:#edfbf4;color:#14784a}.feedback.bad{background:#fff5e9;color:#8a5414}.quiz-actions{display:flex;justify-content:space-between;align-items:center;margin-top:15px;gap:10px}.primary{background:var(--blue);color:white;border:0;border-radius:10px;padding:10px 15px;font-weight:750;box-shadow:0 4px 10px #2454d828}.primary:hover{background:#1946c5}.primary:disabled{opacity:.4;cursor:not-allowed}.secondary{background:#f5f7fb;color:#536176;border:1px solid #e4eaf2;border-radius:10px;padding:10px 14px}.footer{text-align:center;color:#8290a4;font-size:11px;padding:16px 12px 25px}.footer strong{color:#52637b}
+.toast{position:fixed;right:20px;bottom:20px;background:#182438;color:white;padding:12px 16px;border-radius:11px;box-shadow:0 8px 24px #18243830;opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s;z-index:10}.toast.show{opacity:1;transform:translateY(0)}
+.empty{padding:22px;text-align:center;color:var(--muted);background:#f8fafd;border-radius:12px;line-height:1.8}
+@media(max-width:900px){.shell{grid-template-columns:230px minmax(0,1fr);gap:14px}.lesson-grid{grid-template-columns:1fr}.map-card{max-width:none}.welcome-graphic{font-size:55px;padding:0}.quick-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.topbar{padding:15px 18px}.brand h1{font-size:18px}.brand p{font-size:10px}.top-actions .top-btn{padding:7px 9px;font-size:11px}.shell{display:flex;flex-direction:column;padding:0 12px;margin-top:13px}.sidebar{position:static;width:100%;padding:15px}.chapter-list{grid-template-columns:1fr 1fr}.chapter{padding:9px 7px;font-size:12px;gap:7px}.chapter .num{width:23px;height:23px}.side-divider,.search-hint{display:none}.searchbox{margin-top:12px}.progress-wrap{margin-top:12px}.welcome{padding:19px}.welcome h2{font-size:21px}.welcome-graphic{display:none}.stats{gap:7px}.stat{padding:12px}.stat-value{font-size:19px}.stat-label{font-size:11px}.lesson,.quiz{padding:18px}.lesson-head h2{font-size:18px}.quick-grid{grid-template-columns:1fr}.options{grid-template-columns:1fr}.quiz-actions{align-items:stretch}.quiz-actions button{flex:1}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topline">
+    <div class="brand"><div class="globe">🌍</div><div><h1>世界地理交互式教学平台</h1><p>世界地理章节 · 知识点学习 | 地图交互 | 随堂练习</p></div></div>
+    <div class="top-actions"><button class="top-btn" id="resetProgress" title="清除本地学习进度">↻ 重置进度</button></div>
+  </div>
+</header>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="side-heading"><span>📚 章节目录</span><span class="small-label" id="chapterCount">5 个章节</span></div>
+    <nav class="chapter-list" id="chapterList" aria-label="章节目录"></nav>
+    <div class="side-divider"></div>
+    <label class="searchbox"><span>🔎</span><input id="searchInput" type="search" placeholder="搜索知识点、关键词…" aria-label="搜索知识点"></label>
+    <p class="search-hint">输入“海洋”“气候”“人口”等关键词，快速定位相关知识点。</p>
+    <div id="searchResults"></div>
+    <div class="progress-wrap"><div class="progress-top"><strong>学习进度</strong><span id="progressText">0 / 5 已完成</span></div><div class="progress-track"><div class="progress-bar" id="progressBar"></div></div></div>
+  </aside>
+  <main class="main">
+    <section class="panel welcome">
+      <div><div class="eyebrow">WORLD GEOGRAPHY · LEARN BY EXPLORING</div><h2>从地图出发，认识我们的世界</h2><p>通过章节知识卡片、可点击地图和即时反馈练习，建立世界地理知识框架。选择左侧章节开始学习吧。</p></div><div class="welcome-graphic">🧭</div>
+    </section>
+    <section class="stats" aria-label="学习数据">
+      <div class="stat"><div class="stat-label">📖 学习章节</div><div class="stat-value" id="statLearned">0<span style="font-size:13px;font-weight:600"> / 5</span></div><div class="stat-note">完成章节知识浏览</div></div>
+      <div class="stat"><div class="stat-label">🎯 练习正确率</div><div class="stat-value" id="statAccuracy">—</div><div class="stat-note">基于已作答题目统计</div></div>
+      <div class="stat"><div class="stat-label">✨ 连续答对</div><div class="stat-value" id="statStreak">0</div><div class="stat-note">保持专注，持续进步</div></div>
+    </section>
+    <section class="panel lesson" id="lessonPanel">
+      <div class="lesson-head"><div><div class="eyebrow" id="lessonEyebrow">CHAPTER 01</div><h2 id="lessonTitle">1. 世界海陆分布</h2><p id="lessonIntro">认识海洋与陆地的基本格局，了解七大洲、四大洋的空间分布。</p></div><span class="pill" id="lessonTag">🌐 基础认知</span></div>
+      <div class="lesson-grid">
+        <div class="facts" id="facts"></div>
+        <div class="map-card"><div class="map-card-head"><strong>🗺️ 交互式世界地图</strong><span>点击区域探索</span></div><p class="map-hint">点击地图上的绿色区域，查看对应大洲的学习提示。</p>
+          <div class="map-stage">
+            <svg viewBox="0 0 520 290" role="img" aria-label="七大洲示意地图">
+              <rect width="520" height="290" fill="#93c5fd"/>
+              <path d="M0 44 Q90 22 170 47 T340 35 T520 55" fill="none" stroke="#c5e2ff" stroke-width="2" opacity=".7"/>
+              <path d="M0 220 Q100 200 210 225 T410 216 T520 230" fill="none" stroke="#c5e2ff" stroke-width="2" opacity=".7"/>
+              <g id="mapContinents">
+                <path class="continent" data-continent="北美洲" d="M48 60 L101 43 L127 61 L119 91 L94 99 L86 127 L64 115 L57 91 Z" fill="#22c55e"/>
+                <path class="continent" data-continent="南美洲" d="M115 137 L141 130 L155 157 L145 190 L131 225 L119 205 L123 174 Z" fill="#22c55e"/>
+                <path class="continent" data-continent="欧洲" d="M218 65 L247 57 L266 70 L255 89 L228 91 L211 79 Z" fill="#22c55e"/>
+                <path class="continent" data-continent="非洲" d="M226 100 L264 98 L281 132 L264 177 L243 199 L227 165 L217 130 Z" fill="#22c55e"/>
+                <path class="continent" data-continent="亚洲" d="M269 52 L329 39 L391 56 L424 80 L398 111 L352 104 L320 124 L280 96 L256 76 Z" fill="#22c55e"/>
+                <path class="continent" data-continent="大洋洲" d="M375 166 L414 158 L440 177 L425 204 L389 207 L369 188 Z" fill="#22c55e"/>
+                <path class="continent" data-continent="南极洲" d="M160 249 Q260 236 364 250 L349 267 L180 267 Z" fill="#22c55e"/>
+              </g>
+              <g fill="#fff" font-size="12" font-weight="700" opacity=".96" pointer-events="none" text-anchor="middle">
+                <text x="83" y="78">北美洲</text><text x="132" y="168">南美洲</text><text x="237" y="76">欧洲</text><text x="248" y="145">非洲</text><text x="340" y="78">亚洲</text><text x="405" y="186">大洋洲</text><text x="260" y="261">南极洲</text>
+              </g>
+            </svg>
+          </div>
+          <div class="map-caption"><span>示意地图 · 非精确比例</span><span>🟩 点击绿色区域</span></div>
+          <div class="selected-info" aria-live="polite"><strong id="continentTitle">试着点击一个大洲</strong><p id="continentDesc">观察各大洲的位置、形状与相邻海洋，建立空间概念。</p></div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:18px"><button class="primary" id="markComplete">✓ 标记本章已学完</button></div>
+    </section>
+    <section class="panel" style="padding:21px 25px">
+      <div class="section-title"><div><h3>🧩 知识点速览</h3><p style="margin-top:5px">将核心概念拆成小块，便于记忆与复习</p></div></div>
+      <div class="quick-grid" id="quickGrid"></div>
+    </section>
+    <section class="panel quiz" id="quizPanel">
+      <div class="quiz-top"><h3>🎯 随堂练习</h3><span class="quiz-count" id="quizCount">本章第 1 题</span></div>
+      <div class="question" id="questionText">地球表面海洋与陆地面积比例大约是？</div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <div class="quiz-actions"><button class="secondary" id="explainBtn">查看知识提示</button><button class="primary" id="nextQuestion" disabled>下一题 →</button></div>
+    </section>
+  </main>
+</div>
+<footer class="footer"><strong>世界地理交互式教学网页</strong> · 本地离线使用 · 适用于课堂教学与自主学习</footer>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const chapters = [
+ {title:"世界海陆分布",tag:"🌐 基础认知",intro:"认识海洋与陆地的基本格局，了解七大洲、四大洋的空间分布。",facts:[
+  ["🌊","海陆比例","地球表面约 71% 被海洋覆盖，陆地约占 29%，因此从太空看地球呈现蓝色。"],
+  ["🧭","七大洲","亚洲、非洲、北美洲、南美洲、南极洲、欧洲和大洋洲，面积与形状各不相同。"],
+  ["🌐","四大洋","太平洋、大西洋、印度洋和北冰洋。太平洋面积最大，北冰洋面积最小。"],
+  ["📍","分布特点","陆地主要集中在北半球；海洋彼此连通，构成连续的水域系统。"]
+ ],cards:[["🌊","海洋与陆地","海洋面积约占地表的 71%，陆地约占 29%。","记忆口诀：三分陆地，七分海洋。"],["🧩","七大洲","按面积从大到小大致为亚洲、非洲、北美洲、南美洲、南极洲、欧洲、大洋洲。","亚洲面积最大，大洋洲面积最小。"],["🌐","四大洋","太平洋、大西洋、印度洋、北冰洋。","太平洋面积最大，北冰洋面积最小。"]],quiz:[
+ {q:"地球表面海洋与陆地面积比例大约是？",opts:["海洋 29%，陆地 71%","海洋 71%，陆地 29%","海洋与陆地各占 50%","海洋 60%，陆地 40%"],a:1,why:"地球表面约 71% 是海洋、29% 是陆地，可记作“三分陆地，七分海洋”。"},
+ {q:"面积最大的大洲是？",opts:["非洲","北美洲","亚洲","南极洲"],a:2,why:"亚洲是世界面积最大的大洲，也是人口最多的大洲。"},
+ {q:"世界面积最大的大洋是？",opts:["大西洋","印度洋","北冰洋","太平洋"],a:3,why:"太平洋位于亚洲、大洋洲、美洲和南极洲之间，面积约占全球海洋面积的近一半。"}]},
+ {title:"世界气候类型",tag:"🌤️ 自然环境",intro:"理解气温与降水的地域差异，认识主要气候类型及其分布规律。",facts:[
+  ["🌡️","气候要素","气温和降水是描述气候的两个主要要素；气候反映一个地区多年天气的平均状况。"],
+  ["☀️","纬度影响","低纬度地区太阳辐射强，通常气温较高；高纬度地区太阳辐射弱，气温较低。"],
+  ["🌧️","降水差异","赤道附近多雨，副热带部分地区较干燥；迎风坡通常比背风坡降水多。"],
+  ["⛰️","地形与海陆","海拔升高通常气温降低；沿海地区受海洋影响较大，内陆地区气温年较差往往更大。"]
+ ],cards:[["🌴","热带雨林气候","全年高温多雨，常见于赤道附近地区。","代表地区：亚马孙平原、刚果盆地。"],["🌾","热带草原气候","全年高温，干湿季分明。","代表地区：非洲中部和南部部分地区。"],["❄️","极地气候","全年寒冷，降水稀少，主要分布在极地地区。","代表地区：南极大陆、格陵兰岛内部。"]],quiz:[
+ {q:"描述气候最重要的两个要素是？",opts:["风向和气压","气温和降水","云量和能见度","日照和风速"],a:1,why:"气温与降水是气候分类和气候特征描述中最核心的两个要素。"},
+ {q:"赤道附近常见的气候类型是？",opts:["热带雨林气候","温带大陆性气候","极地气候","地中海气候"],a:0,why:"赤道附近全年太阳辐射较强、对流旺盛，通常形成全年高温多雨的热带雨林气候。"},
+ {q:"一般来说，海拔升高时气温会怎样变化？",opts:["持续升高","基本不变","通常降低","只受经度影响"],a:2,why:"在对流层中，气温通常随海拔升高而降低，平均每升高 1000 米约下降 6℃左右。"}]},
+ {title:"七大洲概况",tag:"🗺️ 区域地理",intro:"从面积、位置、地形和典型自然环境等方面，认识七大洲的主要特征。",facts:[
+  ["🌏","亚洲","世界面积最大的大洲，地形复杂，中部高、四周低，气候类型多样。"],
+  ["🦁","非洲","热带面积广，有“热带大陆”之称，赤道横穿中部，撒哈拉沙漠位于北部。"],
+  ["🏔️","南北美洲","纵列分布特征明显：西部高大山系、中部平原、东部高原和山地。"],
+  ["🐧","南极洲与大洋洲","南极洲大部分被冰雪覆盖；大洋洲包括澳大利亚大陆及周边岛屿。"]
+ ],cards:[["🌏","亚洲","世界最大、人口最多的大洲，地形和气候类型复杂多样。","世界最高峰珠穆朗玛峰位于亚洲。"],["🦁","非洲","热带范围广，撒哈拉沙漠是世界最大的热带沙漠。","赤道穿过非洲中部。"],["🏔️","南美洲","安第斯山脉沿西部延伸，亚马孙平原分布于北部。","亚马孙河流域拥有广阔的热带雨林。"]],quiz:[
+ {q:"世界面积最大的大洲是？",opts:["非洲","亚洲","欧洲","南美洲"],a:1,why:"亚洲面积约 4400 万平方千米，是世界面积最大的大洲。"},
+ {q:"被称为“热带大陆”的大洲通常是？",opts:["欧洲","南极洲","非洲","北美洲"],a:2,why:"非洲大部分位于热带，热带气候分布广，因此常被称为“热带大陆”。"},
+ {q:"安第斯山脉主要位于哪个大洲？",opts:["北美洲","南美洲","亚洲","非洲"],a:1,why:"安第斯山脉沿南美洲西部南北延伸，是世界最长的大陆山脉之一。"}]},
+ {title:"四大洋",tag:"🌊 海洋地理",intro:"认识四大洋的位置、面积差异与海洋对气候、交通和资源的影响。",facts:[
+  ["🌊","太平洋","面积最大、岛屿众多，位于亚洲和大洋洲以东、美洲以西。"],
+  ["🚢","大西洋","呈“S”形，连接欧洲、非洲与美洲，是重要的国际航运通道。"],
+  ["🌴","印度洋","大部分位于热带，北部受季风影响明显，连接亚洲、非洲和大洋洲。"],
+  ["🧊","北冰洋","面积最小、纬度最高，海水寒冷，部分海域长期或季节性结冰。"]
+ ],cards:[["🌊","太平洋","世界最大、最深的大洋，环绕其分布着众多岛屿。","马里亚纳海沟位于西太平洋。"],["🚢","大西洋","轮廓近似“S”形，连接多个重要经济区域。","跨大西洋航线历史悠久。"],["🧊","北冰洋","位于北极地区，是四大洋中面积最小的大洋。","海冰范围随季节变化。"]],quiz:[
+ {q:"四大洋中面积最大的是？",opts:["大西洋","印度洋","太平洋","北冰洋"],a:2,why:"太平洋面积约 1.6 亿平方千米，是世界面积最大的大洋。"},
+ {q:"北冰洋的主要位置特征是？",opts:["主要位于赤道附近","位于北极地区","位于南极大陆周边","完全被大陆包围"],a:1,why:"北冰洋大致位于北极圈附近，被欧亚大陆和北美洲环绕。"},
+ {q:"北印度洋海域受哪种季节性风系影响显著？",opts:["信风以外没有季节风","季风","极地东风","焚风"],a:1,why:"北印度洋海域受季风影响显著，风向会随季节发生变化。"}]},
+ {title:"世界人口与人种",tag:"👥 人文地理",intro:"从人口分布、人口增长和迁移等角度，理解世界人口的空间差异。",facts:[
+  ["👥","人口分布","世界人口分布不均，亚洲东部、南部和欧洲部分地区人口较为稠密。"],
+  ["🏙️","影响因素","地形、气候、水源、交通、经济发展和历史条件共同影响人口分布。"],
+  ["📈","人口变化","人口增长受出生率、死亡率和人口迁移等因素影响，各地区差异明显。"],
+  ["🌍","人口迁移","就业、教育、家庭团聚和环境变化等因素都可能促使人口迁移。"]
+ ],cards:[["👥","人口稠密区","亚洲东部、南部以及欧洲西部等地区人口较为集中。","通常具备适宜的自然条件和较发达的经济。"],["🏜️","人口稀疏区","极端干旱、严寒、高海拔或湿热雨林地区人口相对稀少。","如撒哈拉沙漠、南极洲和高山地区。"],["🚶","人口迁移","人口迁移受到就业、教育、家庭、环境与政策等多种因素影响。","城市化是当代人口空间变化的重要现象。"]],quiz:[
+ {q:"下列地区中，通常人口较为稠密的是？",opts:["撒哈拉沙漠腹地","南极大陆","亚洲东部平原地区","高纬度冰原"],a:2,why:"亚洲东部平原地区自然条件相对适宜、农业历史悠久且经济活动活跃，人口较为稠密。"},
+ {q:"影响人口分布的因素主要是？",opts:["只有气候","自然条件与社会经济条件共同作用","只有纬度","只有国土面积"],a:1,why:"人口分布由自然条件和社会经济因素共同影响，包括气候、地形、交通、就业和历史等。"},
+ {q:"人口迁移的常见推动因素不包括？",opts:["就业机会","教育资源","家庭团聚","大陆的绝对位置"],a:3,why:"就业、教育和家庭团聚都可能推动人口迁移；大陆的绝对位置不是通常的人口迁移动因。"}]}
+];
+const continentInfo={
+ "北美洲":"位于西半球北部，北接北冰洋，东临大西洋，西临太平洋。西部有落基山脉，中央为广阔平原。",
+ "南美洲":"位于西半球南部，西临太平洋、东临大西洋。安第斯山脉沿西岸分布，亚马孙河流域有广阔雨林。",
+ "欧洲":"位于亚欧大陆西部，海岸线曲折，人口城市密集，温带海洋性气候和地中海气候分布较典型。",
+ "非洲":"跨南北半球，赤道穿过中部，热带范围广。北部的撒哈拉沙漠面积广大。",
+ "亚洲":"世界面积最大的大洲，跨寒、温、热三带，地形复杂，人口众多，区域差异显著。",
+ "大洋洲":"位于太平洋西南部，澳大利亚大陆是其主体，周围分布众多岛屿。",
+ "南极洲":"位于地球最南端，大部分被厚冰层覆盖，气候酷寒，是地球上平均海拔最高的大洲。"
+};
+let current=0, qIndex=0, answered=false, correctCount=0, totalAnswered=0, streak=0;
+let completed=new Set(JSON.parse(localStorage.getItem('geoCompleted')||'[]'));
+const $=id=>document.getElementById(id);
+function renderChapters(){
+ $('chapterList').innerHTML=chapters.map((c,i)=>`<button class="chapter ${i===current?'active':''}" data-index="${i}"><span class="num">${i+1}</span><span>${c.title}</span>${completed.has(i)?'<span class="check">✓</span>':''}</button>`).join('');
+ $('chapterList').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>selectChapter(Number(b.dataset.index))));
+}
+function selectChapter(i){current=i;qIndex=0;answered=false;renderAll();$('lessonPanel').scrollIntoView({behavior:'smooth',block:'start'});}
+function renderLesson(){
+ const c=chapters[current];$('lessonEyebrow').textContent=`CHAPTER ${String(current+1).padStart(2,'0')}`;$('lessonTitle').textContent=`${current+1}. ${c.title}`;$('lessonIntro').textContent=c.intro;$('lessonTag').textContent=c.tag;
+ $('facts').innerHTML=c.facts.map(f=>`<div class="fact"><div class="fact-icon">${f[0]}</div><div><strong>${f[1]}</strong><span>${f[2]}</span></div></div>`).join('');
+ $('markComplete').textContent=completed.has(current)?'✓ 本章已完成（点击取消）':'✓ 标记本章已学完';
+ $('quickGrid').innerHTML=c.cards.map((x,i)=>`<article class="quick-card"><div class="quick-icon">${x[0]}</div><h4>${x[1]}</h4><p>${x[2]}</p><button class="text-btn" data-card="${i}">记忆提示 →</button><p class="card-tip" hidden>${x[3]}</p></article>`).join('');
+ $('quickGrid').querySelectorAll('[data-card]').forEach(b=>b.addEventListener('click',()=>{const tip=b.parentElement.querySelector('.card-tip');tip.hidden=!tip.hidden;b.textContent=tip.hidden?'记忆提示 →':'收起提示 ↑'}));
+}
+function renderQuiz(){
+ const q=chapters[current].quiz[qIndex];answered=false;$('quizCount').textContent=`本章第 ${qIndex+1} / ${chapters[current].quiz.length} 题`;$('questionText').textContent=q.q;
+ $('options').innerHTML=q.opts.map((o,i)=>`<button class="option" data-answer="${i}"><span class="letter">${String.fromCharCode(65+i)}</span><span>${o}</span></button>`).join('');
+ $('options').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>answer(Number(b.dataset.answer))));
+ $('feedback').className='feedback';$('feedback').textContent='';$('nextQuestion').disabled=true;$('nextQuestion').textContent=qIndex===chapters[current].quiz.length-1?'返回本章开头 ↗':'下一题 →';$('explainBtn').textContent='查看知识提示';
+}
+function answer(i){
+ if(answered)return;answered=true;const q=chapters[current].quiz[qIndex],ok=i===q.a;totalAnswered++;if(ok){correctCount++;streak++}else streak=0;
+ $('options').querySelectorAll('button').forEach((b,j)=>{b.disabled=true;if(j===q.a)b.classList.add('correct');if(j===i&&!ok)b.classList.add('wrong')});
+ const fb=$('feedback');fb.className='feedback show '+(ok?'good':'bad');fb.innerHTML=`<strong>${ok?'回答正确！做得好。':'再想一想，正确答案已标出。'}</strong><br>${q.why}`;$('nextQuestion').disabled=false;updateStats();
+}
+function renderStats(){
+ $('statLearned').innerHTML=`${completed.size}<span style="font-size:13px;font-weight:600"> / ${chapters.length}</span>`;$('progressText').textContent=`${completed.size} / ${chapters.length} 已完成`;$('progressBar').style.width=`${completed.size/chapters.length*100}%`;$('statAccuracy').textContent=totalAnswered?`${Math.round(correctCount/totalAnswered*100)}%`:'—';$('statStreak').textContent=streak;
+}
+function renderAll(){renderChapters();renderLesson();renderQuiz();renderStats();}
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2300)}
+$('markComplete').addEventListener('click',()=>{if(completed.has(current)){completed.delete(current);toast('已取消本章完成状态')}else{completed.add(current);toast('本章学习进度已保存')}localStorage.setItem('geoCompleted',JSON.stringify([...completed]));renderChapters();renderStats();$('markComplete').textContent=completed.has(current)?'✓ 本章已完成（点击取消）':'✓ 标记本章已学完'});
+$('nextQuestion').addEventListener('click',()=>{if(!answered)return;if(qIndex<chapters[current].quiz.length-1){qIndex++;renderQuiz()}else{$('lessonPanel').scrollIntoView({behavior:'smooth',block:'start'});toast('本章练习完成，可以继续复习或切换章节。')}});
+$('explainBtn').addEventListener('click',()=>{const q=chapters[current].quiz[qIndex];const fb=$('feedback');if(fb.classList.contains('show')){fb.classList.remove('show');$('explainBtn').textContent='查看知识提示'}else{fb.className='feedback show';fb.innerHTML=`<strong>知识提示</strong><br>${q.why}`;$('explainBtn').textContent='收起知识提示'}});
+document.querySelectorAll('.continent').forEach(el=>el.addEventListener('click',()=>{document.querySelectorAll('.continent').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');const name=el.dataset.continent;$('continentTitle').textContent=name;$('continentDesc').textContent=continentInfo[name]||'点击探索该区域的地理位置与自然特征。'}));
+$('searchInput').addEventListener('input',e=>{const query=e.target.value.trim().toLowerCase(),res=$('searchResults');if(!query){res.innerHTML='';return}const found=[];chapters.forEach((c,i)=>{const corpus=[c.title,c.intro,...c.facts.flat(),...c.cards.flat()].join(' ').toLowerCase();if(corpus.includes(query))found.push({i,title:c.title,desc:c.intro})});res.innerHTML=found.length?`<div style="margin-top:10px;display:grid;gap:6px">${found.map(x=>`<button class="chapter" data-result="${x.i}" style="padding:9px;background:#f8fafd"><span>🔎</span><span style="font-size:12px">${x.title}</span><span class="check">→</span></button>`).join('')}</div>`:`<div class="empty" style="margin-top:10px;font-size:12px">没有找到相关章节。<br>试试“海洋”或“人口”。</div>`;res.querySelectorAll('[data-result]').forEach(b=>b.addEventListener('click',()=>{selectChapter(Number(b.dataset.result));$('searchInput').value='';res.innerHTML=''}))});
+$('resetProgress').addEventListener('click',()=>{if(confirm('确定清除已完成章节记录吗？练习统计会在本次页面刷新后重新开始。')){completed.clear();localStorage.removeItem('geoCompleted');renderAll();toast('学习进度已重置')}});
+renderAll();
+</script>
+</body>
+</html>
